@@ -64,7 +64,7 @@ async function remove(userId) {
 
 async function update(user) {
    try {
-      const { username, fullname, imgUrl, mentions, subscribedTo, starredBoardsIds, starredBoards, isAdmin } = user
+      const { username, fullname, imgUrl, mentions, subscribedTo, starredBoards, isAdmin = false } = user
       const userToSave = {
          _id: ObjectId(user._id),
          username,
@@ -72,7 +72,6 @@ async function update(user) {
          imgUrl,
          mentions,
          subscribedTo,
-         starredBoardsIds,
          starredBoards,
          isAdmin
       }
@@ -87,20 +86,21 @@ async function update(user) {
 
 async function add(user) {
    try {
+      console.log('user', user)
       // peek only updatable fields!
       const userToAdd = {
          username: user.username,
          password: user.password,
          fullname: user.fullname,
-         imgUrl: user.imgUrl,
-         mentions: user.mentions,
-         subscribedTo: user.subscribedTo,
-         starredBoardsIds: user.starredBoardsIds,
-         starredBoards: user.starredBoards,
-         isAdmin: user.isAdmin
+         imgUrl: `https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png`,
+         mentions: [],
+         subscribedTo: [],
+         starredBoards: [],
+         isAdmin: false
       }
       const collection = await dbService.getCollection('user')
       await collection.insertOne(userToAdd)
+      console.log('userToAdd', userToAdd)
       return userToAdd
    } catch (err) {
       logger.error('cannot insert user', err)
